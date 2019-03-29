@@ -1,0 +1,35 @@
+{
+   "name": "confi",
+   "version": "0.0.1",
+   "description": "A comfy conference booking system",
+   "devDependencies": {
+      "@types/bcryptjs": "^2.4.2",
+      "@types/body-parser": "^1.17.0",
+      "@types/cors": "^2.8.4",
+      "@types/helmet": "0.0.43",
+      "@types/jsonwebtoken": "^8.3.2",
+      "@types/node": "^8.0.29",
+      "@types/swagger-ui-express": "^3.0.0",
+      "ts-node": "^8.0.3",
+      "ts-node-dev": "^1.0.0-pre.32",
+      "typescript": "^3.3.4000"
+   },
+   "dependencies": {
+      "bcryptjs": "^2.4.3",
+      "body-parser": "^1.18.1",
+      "class-validator": "^0.9.1",
+      "dotenv": "^7.0.0",
+      "express": "^4.15.4",
+      "jsonwebtoken": "^8.5.1",
+      "pg": "^7.3.0",
+      "reflect-metadata": "^0.1.10",
+      "swagger-ui-express": "^4.0.2",
+      "typeorm": "0.2.14"
+   },
+   "scripts": {
+      "tsc": "tsc",
+      "start": "set debug=* && ts-node-dev --respawn --transpileOnly ./src/index.ts",
+      "prod": "tsc && node ./build/app.js",
+      "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run"
+   }
+}

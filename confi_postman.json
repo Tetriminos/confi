@@ -1,0 +1,154 @@
+{
+	"info": {
+		"_postman_id": "1ca53def-06d3-4844-a9b0-3b1c3ff2703b",
+		"name": "TypeScript Postgres starter",
+		"description": "A starter project which utilizes TypeScript and Postgres",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Admin Login",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"admin\",\n\t\"password\": \"admin\"\n}"
+				},
+				"url": {
+					"raw": "{{host}}/api/auth/login",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all bookings for conference",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "{{host}}/api/conferences/1/bookings",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"conferences",
+						"1",
+						"bookings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a booking for a conference",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"email\": \"aalaadamajcenic@gmail.com\",\n\t\"firstname\": \"domagoj\",\n\t\"lastname\": \"majcenic\",\n\t\"phonenumber\": \"+385994545710\"\n}"
+				},
+				"url": {
+					"raw": "{{host}}/api/conferences/1/bookings",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"conferences",
+						"1",
+						"bookings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a booking",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "{{host}}/api/conferences/1/bookings/4",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"conferences",
+						"1",
+						"bookings",
+						"4"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoiYWRtaW4iLCJpYXQiOjE1NTM4OTk0NjIsImV4cCI6MTU1MzkwMzA2Mn0.KWN5OF2UEK_2-j-N0KfB6Bumg-VrbzEQwAcfzGUamOM",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "7331eaf3-6742-4323-873e-6088098f8d2c",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "94e68d16-e6a1-4088-a86e-a183d654f00e",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "7745d9bb-7099-435b-ae8d-409bbb9346b1",
+			"key": "host",
+			"value": "localhost:3000",
+			"type": "string",
+			"description": ""
+		}
+	]
+}
