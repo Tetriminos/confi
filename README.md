@@ -11,7 +11,9 @@ Steps to run this project:
 Remove synchronize:true from ormconfig.json
 
 # Example .env file
+```
 PORT=3000
 JWT_SECRET=dsfhfdsacdhkjh
 ADMIN_USERNAME=admin
 ADMIN_PASSWORD=admin
+```

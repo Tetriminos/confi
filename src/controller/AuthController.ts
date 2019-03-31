@@ -3,7 +3,7 @@ import * as jwt from 'jsonwebtoken';
 import { getRepository } from 'typeorm';
 
 import { User } from '../entity/User';
-import config from '../config';
+import { JWT_SECRET } from '../config';
 
 export default class AuthController {
   static login = async (req: Request, res: Response) => {
@@ -24,14 +24,14 @@ export default class AuthController {
     }
 
     // check password
-    if (!user.checkIfNonEncryptedPasswordIsValid(password)) {
+    if (await !user.isNonEncryptedPasswordValid(password)) {
       res.status(401).send();
       return;
     }
 
     const token = jwt.sign(
       { userId: user.id, username: user.username },
-      config.jwtSecret,
+      JWT_SECRET,
       { expiresIn: '1h' }
     );
 

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import * as jwt from 'jsonwebtoken';
-import config from '../config';
+import { JWT_SECRET } from '../config';
 
 export const checkJWT = (req: Request, res: Response, next: NextFunction) => {
   // get token from the auth header
@@ -18,7 +18,7 @@ export const checkJWT = (req: Request, res: Response, next: NextFunction) => {
   let jwtPayload;
   // validate token
   try {
-    jwtPayload = jwt.verify(token, config.jwtSecret);
+    jwtPayload = jwt.verify(token, JWT_SECRET);
     res.locals.jwtPayload = jwtPayload;
   } catch (error) {
     res.status(401).send();
@@ -26,7 +26,7 @@ export const checkJWT = (req: Request, res: Response, next: NextFunction) => {
   }
 
   const { userId, username } = jwtPayload;
-  const newToken = jwt.sign({ userId, username }, config.jwtSecret, {
+  const newToken = jwt.sign({ userId, username }, JWT_SECRET, {
     expiresIn: '1h',
   });
 

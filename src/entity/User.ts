@@ -1,13 +1,13 @@
 import {
-    Entity,
-    PrimaryGeneratedColumn,
-    Column,
-    Unique,
-    CreateDateColumn,
-    UpdateDateColumn
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  Unique,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
-import { Length, IsNotEmpty } from "class-validator";
-import * as bcrypt from "bcryptjs";
+import { Length, IsNotEmpty } from 'class-validator';
+import * as bcrypt from 'bcryptjs';
 
 @Entity()
 @Unique(['username'])
@@ -35,11 +35,23 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  hashPassword() {
-    this.password = bcrypt.hashSync(this.password, 10);
+  /**
+   * Hashes the password using bcrypt
+   */
+  async hashPassword() {
+    // we're using the async hash and comparison functions
+    // so we don't block the server for too long
+    this.password = await bcrypt.hash(this.password, 10);
   }
 
-  checkIfNonEncryptedPasswordIsValid(nonEncryptedPassword: string) {
-    return bcrypt.compareSync(nonEncryptedPassword, this.password)
+  /**
+   * Checks if plain, non-encrypted password matches the encrypted one
+   * @param {string} nonEncryptedPassword
+   * @returns {Promise<boolean>} - true if
+   */
+  async isNonEncryptedPasswordValid(
+    nonEncryptedPassword: string
+  ): Promise<boolean> {
+    return await bcrypt.compare(nonEncryptedPassword, this.password);
   }
 }

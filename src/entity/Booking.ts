@@ -1,4 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, Unique, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  Unique,
+  JoinColumn,
+  getRepository,
+} from 'typeorm';
 import { Conference } from './Conference';
 import { IsPhoneNumber, IsEmail, Length } from 'class-validator';
 
@@ -35,3 +43,5 @@ export class Booking {
   @Length(10)
   code: string;
 }
+
+export const getBookingRepository = () => getRepository(Booking);

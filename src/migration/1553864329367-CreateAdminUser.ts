@@ -9,7 +9,7 @@ export class CreateAdminUser1553864329367 implements MigrationInterface {
         password: process.env.ADMIN_PASSWORD,
         role: 'ADMIN'
     });
-    user.hashPassword();
+    await user.hashPassword();
 
     await userRepository.save(user);
   }
