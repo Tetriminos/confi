@@ -2,7 +2,7 @@ version: '3'
 
 services:
   web:
-    image: app # we use the tagged image from migration to avoid rebuilding
+    build: .
     command: npm run debug
     volumes:
       - ./build:/server/build
@@ -11,28 +11,14 @@ services:
       - 9229:9229
     depends_on:
       - db
-      - migration
   db:
     image: postgres
     restart: always
     ports:
       - 5444:5432
-  migration:
-    build: .
-    image: app # we tag the image here
-    command: npm run migration:run
-    volumes:
-      - ./build:/server/build
-    depends_on:
-      - db
     environment:
-      TYPEORM_CONNECTION: postgres
-      TYPEORM_HOST: ${POSTGRES_HOST}
-      TYPEORM_PORT: ${POSTGRES_PORT}
-      TYPEORM_USERNAME: ${POSTGRES_USER}
-      TYPEORM_PASSWORD: ${POSTGRES_PASSWORD}
-      TYPEORM_DATABASE: ${POSTGRES_DB}
-      TYPEORM_MIGRATIONS: build/migration/**/*.js
-      TYPEORM_ENTITIES: build/entity/**/*.js
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+      - POSTGRES_USER
 # this process could be improved by using shell scripts which *actually*
 # wait for the processes to be ready

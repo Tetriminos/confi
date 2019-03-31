@@ -6,11 +6,10 @@
       "postinstall": "tsc -p ./",
       "tsc": "tsc",
       "start": "ts-node-dev --respawn --transpileOnly ./src/index.ts",
-      "debug": "nodemon --watch ./build --inspect=0.0.0.0:9229 --nolazy ./build/index.js",
+      "debug": "tsc && nodemon --watch ./build --inspect=0.0.0.0:9229 --nolazy ./build/index.js",
       "watch": "tsc -w -p ./",
       "docker:debug": "docker-compose -f docker-compose.debug.yml up --build",
-      "prod": "tsc && node ./build/index.js",
-      "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run"
+      "prod": "tsc && node ./build/index.js"
    },
    "devDependencies": {
       "@types/bcryptjs": "^2.4.2",
@@ -37,7 +36,7 @@
       "pg": "^7.3.0",
       "reflect-metadata": "^0.1.10",
       "swagger-ui-express": "^4.0.2",
-      "typeorm": "0.2.14"
+      "typeorm": "^0.2.14"
    },
    "engines": {
       "node": ">=8.0.0 <11.0.0"
