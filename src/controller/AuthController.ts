@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
-import { getRepository } from 'typeorm';
 
-import { User } from '../entity/User';
+import { User, getUserRepository } from '../entity/User';
 import { JWT_SECRET } from '../config';
 
 export default class AuthController {
@@ -14,7 +13,7 @@ export default class AuthController {
     }
 
     // get user from db
-    const userRepository = getRepository(User);
+    const userRepository = getUserRepository();
     let user: User;
     try {
       user = await userRepository.findOneOrFail({ where: { username } });

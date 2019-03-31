@@ -5,6 +5,7 @@ import {
   Unique,
   CreateDateColumn,
   UpdateDateColumn,
+  getRepository,
 } from 'typeorm';
 import { Length, IsNotEmpty } from 'class-validator';
 import * as bcrypt from 'bcryptjs';
@@ -55,3 +56,5 @@ export class User {
     return await bcrypt.compare(nonEncryptedPassword, this.password);
   }
 }
+
+export const getUserRepository = () => getRepository(User);

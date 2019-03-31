@@ -2,7 +2,8 @@ import { Request, Response } from 'express';
 import { validate } from 'class-validator';
 import * as crypto from 'crypto';
 
-import { Booking, getBookingRepository } from '../entity/Booking';
+import { getBookingRepository } from '../entity/Booking';
+import { sendCodeViaEMail } from '../services/email';
 
 export default class BookingController {
   static list = async (req: Request, res: Response) => {
@@ -63,6 +64,7 @@ export default class BookingController {
     }
 
     res.status(204).send();
+    await sendCodeViaEMail(booking.email, booking.code);
   };
 
   static delete = async (req: Request, res: Response) => {
