@@ -1,19 +1,19 @@
 version: '3'
 
 services:
-  sut:
+  web:
     build: .
-    command: npm test
+    command: npm start
     volumes:
       - ./build:/server/build
+    ports:
+      - 3000:${PORT}
     depends_on:
-      - test_db
-    env_file:
-      - test.env
-  test_db:
+      - db
+  db:
     image: postgres
     restart: always
     ports:
       - 5444:5432
     env_file:
-      - test.env
+      - .env

@@ -1,61 +1,163 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "app",
-    "version": "1.0.0"
+    "title": "Confi",
+    "description": "A comfy conference booking system",
+    "version": "0.0.1"
   },
   "host": "localhost:3000",
-  "basePath": "/api",
   "schemes": ["http"],
-  "produces": ["application/json"],
   "paths": {
-    "/auth/login": {
+    "/api/auth/login": {
       "post": {
-        "summary": "Login a user",
-        "responses": {
-          "200": {
-            "description": "An authorization token"
-          },
-          "400": {
-            "description": "Bad request"
-          }
-        },
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "summary": "Admin Login",
+        "description": "Admin Login",
+        "operationId": "adminLogin",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "parameters": [
           {
             "name": "body",
             "in": "body",
-            "description": "User that needs to be logged in",
+            "description": "the \"AdminLogin\" model",
             "required": true,
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
+            "schema": { "$ref": "#/definitions/UserLoginInfo" }
           }
-        ]
+        ],
+        "responses": {
+          "204": { "description": "Logged in", "schema": { "type": "string" } },
+          "400": { "description": "Bad Request" }
+        },
+        "security": []
+      }
+    },
+    "/api/conferences/{conferenceId}/bookings": {
+      "post": {
+        "summary": "Create a booking for a conference",
+        "description": "Create a booking for a conference",
+        "operationId": "createABookingForAConference",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "name": "CreateABookingForAConference",
+            "in": "body",
+            "description": "Booking for a conference",
+            "required": true,
+            "schema": { "$ref": "#/definitions/Booking" }
+          },
+          {
+            "name": "conferenceId",
+            "in": "path",
+            "schema": { "type": "integer", "default": 1 },
+            "required": true,
+            "description": "Numeric ID of the conference, is 1 since we're still in the 1 supported conference stage of the app"
+          }
+        ],
+        "responses": {
+          "204": { "description": "Booking created" },
+          "400": { "description": "Bad Request" }
+        },
+        "security": []
+      },
+      "get": {
+        "summary": "Get all bookings for conference",
+        "description": "Get all bookings for conference",
+        "operationId": "getAllBookingsForConference",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT token, e.g. 'Bearer $YOUR_TOKEN'",
+            "required": "true",
+            "type": "string"
+          },
+          {
+            "name": "conferenceId",
+            "in": "path",
+            "schema": { "type": "integer", "default": 1 },
+            "required": true,
+            "description": "Numeric ID of the conference, is 1 since we're still in the 1 supported conference stage of the app"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Bookings array" },
+          "400": { "description": "Bad Request" },
+          "401": { "$ref": "#/components/responses/UnauthorizedError" }
+        },
+        "security": [ "bearerAuth" ]
+      }
+    },
+    "/api/conferences/{conferenceId}/bookings/{bookingId}": {
+      "delete": {
+        "summary": "Delete a booking",
+        "description": "Delete a booking",
+        "operationId": "deleteABooking",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT token, e.g. 'Bearer $YOUR_TOKEN'",
+            "required": "true",
+            "type": "string"
+          },
+          {
+            "name": "conferenceId",
+            "in": "path",
+            "schema": { "type": "integer", "default": 1 },
+            "required": true,
+            "description": "Numeric ID of the conference, is 1 since we're still in the 1 supported conference stage of the app"
+          },
+          {
+            "name": "bookingId",
+            "in": "path",
+            "schema": { "type": "integer" },
+            "required": true,
+            "description": "Numeric ID of the booking"
+          }
+        ],
+        "responses": {
+          "204": { "description": "Successfully deleted" },
+          "400": { "description": "Bad Request" },
+          "401": { "$ref": "#/components/responses/UnauthorizedError" }
+        },
+        "security": [ "bearerAuth" ]
       }
     }
   },
   "definitions": {
-    "User": {
-      "type": "object",
+    "UserLoginInfo": {
+      "description": "User login info model",
+      "required": ["password", "username"],
       "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "username": {
-          "type": "string"
-        },
-        "password": {
-          "type": "string"
-        },
-        "role": {
-          "type": "string"
-        }
+        "password": { "type": "string", "example": "admin" },
+        "username": { "type": "string", "example": "admin" }
+      }
+    },
+    "Booking": {
+      "description": "Booking Model",
+      "required": ["email", "firstname", "lastname", "phonenumber"],
+      "properties": {
+        "email": { "type": "string", "example": "dmajcenic@gmail.com" },
+        "firstname": { "type": "string", "example": "domagoj" },
+        "lastname": { "type": "string", "example": "majcenic" },
+        "phonenumber": { "type": "string", "example": "+385994545710" }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "responses": {
+      "UnauthorizedError": {
+        "description": "Access token is missing or invalid"
       }
     }
   }

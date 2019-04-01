@@ -16,7 +16,7 @@ const config: ConnectionOptions = {
     subscribersDir: 'src/subscriber',
   },
   synchronize: true,
-  migrationsRun: true
+  migrationsRun: true,
 };
 
 export const ormConfig = config;

@@ -8,7 +8,7 @@ describe('User entity', function() {
   const userData = {
     username: 'admin',
     nonEncryptedPassword: 'admin',
-    role: 'ADMIN'
+    role: 'ADMIN',
   };
 
   describe('hashPassword', () => {
@@ -19,8 +19,10 @@ describe('User entity', function() {
       user.role = userData.role;
 
       await user.hashPassword();
-      expect(await bcrypt.compare(userData.nonEncryptedPassword, user.password)).to.be.true;
-      expect(await bcrypt.compare(userData.nonEncryptedPassword, 'badmin')).to.be.false;
+      expect(await bcrypt.compare(userData.nonEncryptedPassword, user.password))
+        .to.be.true;
+      expect(await bcrypt.compare(userData.nonEncryptedPassword, 'badmin')).to
+        .be.false;
     });
   });
 

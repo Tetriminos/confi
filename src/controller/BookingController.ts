@@ -7,9 +7,9 @@ import { sendCodeViaEMail } from '../services/email';
 
 export default class BookingController {
   static list = async (req: Request, res: Response) => {
-    const conferenceID = req.params.conferenceId;
+    const conferenceId = req.params.conferenceId;
 
-    if (!conferenceID) {
+    if (!conferenceId) {
       res.status(400).send('No conference id provided');
       return;
     }
@@ -25,8 +25,9 @@ export default class BookingController {
           'phonenumber',
           'conferenceId',
           'code',
+          'id',
         ],
-        where: { conferenceId: conferenceID },
+        where: { conferenceId },
       });
     } catch (error) {
       res.status(400).send('An error occurred whilst retreiving bookings');
@@ -38,6 +39,12 @@ export default class BookingController {
 
   static create = async (req: Request, res: Response) => {
     const conferenceId = req.params.conferenceId;
+
+    if (!conferenceId) {
+      res.status(400).send('No conference id provided');
+      return;
+    }
+
     const { firstname, lastname, email, phonenumber } = req.body;
 
     const bookingRepository = getBookingRepository();
@@ -69,6 +76,12 @@ export default class BookingController {
 
   static delete = async (req: Request, res: Response) => {
     const conferenceId = req.params.conferenceId;
+
+    if (!conferenceId) {
+      res.status(400).send('No conference id provided');
+      return;
+    }
+
     const id = req.params.id;
 
     const bookingRepository = getBookingRepository();

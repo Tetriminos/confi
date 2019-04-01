@@ -1,5 +1,10 @@
 import * as request from 'supertest';
-import { expect } from 'chai';
+import * as chai from 'chai';
+import chaiExclude from 'chai-exclude';
+
+chai.use(chaiExclude);
+
+const expect = chai.expect;
 
 import * as jwt from 'jsonwebtoken';
 
@@ -30,6 +35,11 @@ const bookingData2 = {
 };
 
 describe('HTTP routes', function() {
+  this.timeout(9000);
+  before((done) => {
+    setTimeout(() => { done() }, 5000);
+  });
+
   // we are doing http and db related stuff, so this is a precaution
   this.timeout(4000);
 
@@ -105,7 +115,7 @@ describe('HTTP routes', function() {
         .set('Authorization', `Bearer ${token}`);
 
       expect(response.statusCode).to.equal(200);
-      expect(response.body).to.deep.equal([bookingData1]);
+      expect(response.body).excluding('id').to.deep.equal([bookingData1]);
     });
 
     it('should return HTTP 200 and an array containing two bookings if two were made', async () => {
@@ -118,7 +128,7 @@ describe('HTTP routes', function() {
         .set('Authorization', `Bearer ${token}`);
 
       expect(response.statusCode).to.equal(200);
-      expect(response.body).to.deep.equal([bookingData1, bookingData2]);
+      expect(response.body).excluding('id').to.deep.equal([bookingData1, bookingData2]);
     });
   });
 
@@ -255,22 +265,31 @@ describe('HTTP routes', function() {
       const bookingRepository = getBookingRepository();
       await bookingRepository.save(bookingRepository.create(bookingData1));
 
-      const foundUser = await bookingRepository.findOne({ where: { email: bookingData1.email } });
+      const foundUser = await bookingRepository.findOne({
+        where: { email: bookingData1.email },
+      });
       const userId = foundUser.id;
       expect(foundUser).to.not.be.undefined;
 
-      const response = await request(app)
-        .delete(`/api/conferences/1/bookings/${userId}`);
+      const response = await request(app).delete(
+        `/api/conferences/1/bookings/${userId}`
+      );
 
       expect(response.statusCode).to.equal(401);
-      expect(await bookingRepository.findOne({ where: { email: bookingData1.email } })).to.not.be.undefined;
+      expect(
+        await bookingRepository.findOne({
+          where: { email: bookingData1.email },
+        })
+      ).to.not.be.undefined;
     });
 
     it('should return HTTP 204 and delete a user if we are an admin user', async () => {
       const bookingRepository = getBookingRepository();
       await bookingRepository.save(bookingRepository.create(bookingData1));
 
-      const foundUser = await bookingRepository.findOne({ where: { email: bookingData1.email } });
+      const foundUser = await bookingRepository.findOne({
+        where: { email: bookingData1.email },
+      });
       const userId = foundUser.id;
       expect(foundUser).to.not.be.undefined;
 
@@ -279,14 +298,20 @@ describe('HTTP routes', function() {
         .set('Authorization', `Bearer ${token}`);
 
       expect(response.statusCode).to.equal(204);
-      expect(await bookingRepository.findOne({ where: { email: bookingData1.email } })).to.be.undefined;
+      expect(
+        await bookingRepository.findOne({
+          where: { email: bookingData1.email },
+        })
+      ).to.be.undefined;
     });
 
-    it('should return HTTP 400 if we\'re trying to delete a user with an existing id but for wrong conference', async () => {
+    it("should return HTTP 400 if we're trying to delete a user with an existing id but for wrong conference", async () => {
       const bookingRepository = getBookingRepository();
       await bookingRepository.save(bookingRepository.create(bookingData1));
 
-      const foundUser = await bookingRepository.findOne({ where: { email: bookingData1.email } });
+      const foundUser = await bookingRepository.findOne({
+        where: { email: bookingData1.email },
+      });
       const userId = foundUser.id;
       expect(foundUser).to.not.be.undefined;
 
@@ -295,7 +320,11 @@ describe('HTTP routes', function() {
         .set('Authorization', `Bearer ${token}`);
 
       expect(response.statusCode).to.equal(400);
-      expect(await bookingRepository.findOne({ where: { email: bookingData1.email } })).to.not.be.undefined;
+      expect(
+        await bookingRepository.findOne({
+          where: { email: bookingData1.email },
+        })
+      ).to.not.be.undefined;
     });
   });
 });
