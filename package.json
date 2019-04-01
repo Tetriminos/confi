@@ -4,23 +4,29 @@
    "description": "A comfy conference booking system",
    "scripts": {
       "postinstall": "tsc -p ./",
-      "tsc": "tsc",
       "start": "ts-node-dev --respawn --transpileOnly ./src/index.ts",
-      "debug": "tsc && nodemon --watch ./build --inspect=0.0.0.0:9229 --nolazy ./build/index.js",
+      "debug": "ts-node-dev --inspect --respawn --transpileOnly ./src/index.ts",
       "watch": "tsc -w -p ./",
       "docker:debug": "docker-compose -f docker-compose.debug.yml up --build",
-      "prod": "tsc && node ./build/index.js"
+      "docker:test": "docker-compose -f docker-compose.test.yml up --build --exit-code-from sut",
+      "prod": "tsc && node ./build/index.js",
+      "test": "mocha -r ts-node/register src/**/*.test.ts --exit"
    },
    "devDependencies": {
       "@types/bcryptjs": "^2.4.2",
       "@types/body-parser": "^1.17.0",
+      "@types/chai": "^4.1.7",
       "@types/cors": "^2.8.4",
       "@types/helmet": "0.0.43",
       "@types/jsonwebtoken": "^8.3.2",
+      "@types/mocha": "^5.2.6",
       "@types/node": "^8.0.29",
       "@types/nodemailer": "^4.6.7",
       "@types/swagger-ui-express": "^3.0.0",
+      "chai": "^4.2.0",
+      "mocha": "^6.0.2",
       "nodemon": "^1.18.10",
+      "supertest": "^4.0.2",
       "ts-node": "^8.0.3",
       "ts-node-dev": "^1.0.0-pre.32",
       "typescript": "^3.3.4000"

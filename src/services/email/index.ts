@@ -22,9 +22,13 @@ export const sendCodeViaEMail = async (
   };
 
   try {
-    const { accepted }: { accepted: string[] } = await transporter.sendMail(mailOptions);
+    const { accepted, rejected }: { accepted: string[], rejected: string[] } = await transporter.sendMail(mailOptions);
     if (accepted.includes(to)) {
       console.log(`successfully sent code to ${to}`);
+    } else if (rejected.includes(to)) {
+      // not sure whether I retry sending the email, how long do I wait before retries, do I still save the user to the
+      // DB now that he can't get his code, etc.
+      console.error(`email rejected by ${to}`);
     }
   } catch (err) {
     // I am not sure on what to do when an error occurs

@@ -23,7 +23,7 @@ export default class AuthController {
     }
 
     // check password
-    if (await !user.isNonEncryptedPasswordValid(password)) {
+    if (!await user.isNonEncryptedPasswordValid(password)) {
       res.status(401).send();
       return;
     }
