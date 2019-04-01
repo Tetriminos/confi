@@ -46,9 +46,9 @@ export class User {
   }
 
   /**
-   * Checks if plain, non-encrypted password matches the encrypted one
+   * Checks if plain, non-encrypted password matches the hashed one
    * @param {string} nonEncryptedPassword
-   * @returns {Promise<boolean>} - true if
+   * @returns {Promise<boolean>} - true if the password matches the hashed one
    */
   async isNonEncryptedPasswordValid(
     nonEncryptedPassword: string
